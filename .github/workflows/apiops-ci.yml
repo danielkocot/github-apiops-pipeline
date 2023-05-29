@@ -1,0 +1,29 @@
+name: 'APIOps CI Pipeline'
+on:
+  workflow_call:
+    inputs:
+      spec-file:
+        required: true
+        type: string
+    secrets:
+      token:
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Install Vacuum CLI
+      run: npm install -g vacuum-cli
+      
+    - name: Install Portman CLI
+      run: npm install -g portman
+      
+    - name: Run Vacuum CLI for linting
+      run: vaccum validate ${{ inputs.spec-file }}
+      
+    - name: Run Portman tests
+      run: portman --cliOptionsFile portman-cli-options.json
