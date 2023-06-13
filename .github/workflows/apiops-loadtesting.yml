@@ -1,0 +1,52 @@
+name: 'APIOps CD Pipeline'
+on:
+  workflow_call:
+    inputs:
+      spec-file:
+        required: true
+        type: string
+    secrets:
+      token:
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Install Vacuum CLI
+      run: npm install -g vacuum-cli
+      
+    - name: Install Portman CLI
+      run: npm install -g portman
+      
+    - name: Run Vacuum CLI for linting
+      run: vaccum validate ${{ inputs.spec-file }}
+      
+    - name: Run Portman tests
+      run: portman --cliOptionsFile portman-cli-options.json
+    
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy API Definition
+        run: ./deploy-api-definition.sh
+
+  load-test:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup k6
+        run: |
+             curl -s https://install.k6.io | sh
+      - name: Convert Postman Collection to k6 script
+        run: |
+              npx postman-to-k6 "path-to-postman-collection.json" -o "k6-script.js"
+      - name: Run k6 Load Test
+        run: |
+              k6 run ./k6-script.js
