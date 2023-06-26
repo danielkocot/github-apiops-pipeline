@@ -1,4 +1,4 @@
-name: 'APIOps CD Pipeline'
+name: 'APIOps CD Pipeline with Loadtesting'
 on:
   workflow_call:
     inputs:
