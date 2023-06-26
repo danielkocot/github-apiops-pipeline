@@ -1,4 +1,4 @@
-name: 'APIOps CD Pipeline with Loadtesting'
+name: 'APIOps - From Validation to Portal / Marketplace'
 on:
   workflow_call:
     inputs:
