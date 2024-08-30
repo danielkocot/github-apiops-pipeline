@@ -64,7 +64,7 @@ jobs:
         with:
           name: ${{ inputs.api-product-name }}
       - name: Run Portman tests
-        run: npx @apideck/portman --local ${{ inputs.api-product-name }}.yaml --runNewman
+        run: npx @apideck/portman --local ${{ inputs.api-product-name }}.yaml --runNewman --output ${{ inputs.api-product-name }}.postman_collection.json
       - name: Upload Postman collection
         uses: actions/upload-artifact@v4
         with:
