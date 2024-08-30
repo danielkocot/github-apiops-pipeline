@@ -21,17 +21,11 @@ jobs:
     - name: Rename the API Definition
       run: mv ${{ inputs.spec-file }} ${{ inputs.api-product-name }}-unbundled.yaml
 
-    - name: Install Redocly CLI
-      run: npm install -g @redocly/cli
-
     - name: redocly bundle
       run: npx @redocly/cli bundle ${{ inputs.api-product-name }}-unbundled.yaml --output ./${{ inputs.api-product-name }}.yaml
-    
-    - name: Install Vacuum CLI
-      run: npm install -g @quobix/vacuum
       
     - name: Run Vacuum CLI for linting
-      run: npx @quobic/vacuum lint ${{ inputs.api-product-name }}.yaml -d
+      run: npx @quobix/vacuum lint ${{ inputs.api-product-name }}.yaml -d
    
     - name: Archive bundled API Definition
       uses: actions/upload-artifact@v4
