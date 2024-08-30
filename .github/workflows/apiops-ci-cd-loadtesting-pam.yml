@@ -15,9 +15,12 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
+
+    - name: Install Redocly CLI
+      run: npm install -g @redocly/cli
     
     - name: Install Vacuum CLI
-      run: npm install -g vacuum-cli
+      run: npm install -g @quobix/vacuum
       
     - name: Install Portman CLI
       run: npm install -g portman
