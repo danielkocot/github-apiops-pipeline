@@ -1,4 +1,4 @@
-name: APIOps
+name: APIOps for Product API
 
 on:
     push:
