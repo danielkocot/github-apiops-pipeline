@@ -84,7 +84,7 @@ jobs:
              curl -s https://install.k6.io | sh
       - name: Convert Postman Collection to k6 script
         run: |
-              npx postman-to-k6 "${{ inputs.api-product-name }}-postman-collection" -o "k6-script.js"
+              npx postman-to-k6 "${{ inputs.api-product-name }}-postman-collection.json" -o "k6-script.js"
       - name: Run k6 Load Test
         run: |
               k6 run ./k6-script.js
