@@ -2,12 +2,14 @@ openapi: 3.0.0
 info:
     title: Product API
     version: 1.0.0
+    description: API for managing products
 servers:
     - url: https://api.example.com/v1
 paths:
     /products:
         get:
             summary: Get all products
+            operationId: getProducts
             responses:
                 '200':
                     description: Successful response
@@ -19,6 +21,7 @@ paths:
                                     $ref: '#/components/schemas/Product'
         post:
             summary: Create a new product
+            operationId: createProduct
             requestBody:
                 required: true
                 content:
