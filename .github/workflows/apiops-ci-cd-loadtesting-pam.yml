@@ -81,7 +81,7 @@ jobs:
           name: ${{ inputs.api-product-name }}-postman-collection
       - name: Convert Postman Collection to k6 script
         run: |
-              npx postman-to-k6 ${{ inputs.api-product-name }}.postman_collection.json -o k6-script.js
+              npx @apideck/postman-to-k6 ${{ inputs.api-product-name }}.postman_collection.json -o k6-script.js
       - name: Setup k6
         run: |
              sudo gpg -k
