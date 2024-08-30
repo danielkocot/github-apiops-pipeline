@@ -30,12 +30,9 @@ jobs:
       
     - name: Run Vacuum CLI for linting
       run: vacuum lint ${{ inputs.api-product-name }}.yaml -d
-
-    - name: Install Portman CLI
-      run: npm install -g portman
-      
+   
     - name: Run Portman tests
-      run: portman --local ${{ inputs.api-product-name }}.yaml --runNewman
+      run: npx @apideck/portman --local ${{ inputs.api-product-name }}.yaml --runNewman
     
   deploy:
     needs: build
