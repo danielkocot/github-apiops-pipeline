@@ -5,9 +5,9 @@ on:
       spec-file:
         required: true
         type: string
-    secrets:
-      token:
+      api-product-name:
         required: true
+        type: string
 
 jobs:
   build:
@@ -16,8 +16,17 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Rename the API Definition
+      run: mv ${{ inputs.spec-file }} ${{ inputs.api-product-name }}-unbundled.yaml
+
+    - name: Delete the actual spec file
+      run: rm ${{ inputs.spec-file }}
+
     - name: Install Redocly CLI
       run: npm install -g @redocly/cli
+
+    - name: redocly bundle
+      run: redocly bundle ${{ inputs.api-product-name }}-unbundled.yaml --output ./${{ inputs.api-product-name }}.yaml
     
     - name: Install Vacuum CLI
       run: npm install -g @quobix/vacuum
@@ -26,7 +35,7 @@ jobs:
       run: npm install -g portman
       
     - name: Run Vacuum CLI for linting
-      run: vaccum validate ${{ inputs.spec-file }}
+      run: vaccum validate ${{ inputs.api-product-name }}.yaml
       
     - name: Run Portman tests
       run: portman --cliOptionsFile portman-cli-options.json
