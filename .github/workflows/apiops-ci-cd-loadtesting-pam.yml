@@ -32,7 +32,7 @@ jobs:
       run: npm install -g portman
       
     - name: Run Vacuum CLI for linting
-      run: vacuum lint ${{ inputs.api-product-name }}.yaml
+      run: vacuum lint ${{ inputs.api-product-name }}.yaml -d
       
     - name: Run Portman tests
       run: portman --cliOptionsFile portman-cli-options.json
