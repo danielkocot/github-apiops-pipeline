@@ -19,9 +19,6 @@ jobs:
     - name: Rename the API Definition
       run: mv ${{ inputs.spec-file }} ${{ inputs.api-product-name }}-unbundled.yaml
 
-    - name: Delete the actual spec file
-      run: rm ${{ inputs.spec-file }}
-
     - name: Install Redocly CLI
       run: npm install -g @redocly/cli
 
