@@ -39,7 +39,7 @@ jobs:
         name: ${{ inputs.api-product-name }}
         path: ${{ inputs.api-product-name }}.yaml
     
-  deploy:
+  deploy_to_dev:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -55,7 +55,7 @@ jobs:
         run: sh ./deploy-api-definition.sh
 
 
-  contract-test:
+  contract-test_in_dev:
     needs: deploy
     runs-on: ubuntu-latest
     steps:
@@ -71,7 +71,7 @@ jobs:
           name: ${{ inputs.api-product-name }}-postman-collection
           path: ${{ inputs.api-product-name }}.postman_collection.json
  
-  deploy-to-pam:
+  deploy-to-prod:
     needs: contract-test
     runs-on: ubuntu-latest
     steps:
