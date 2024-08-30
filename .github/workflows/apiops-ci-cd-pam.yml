@@ -25,13 +25,13 @@ jobs:
       run: npm install -g @redocly/cli
 
     - name: redocly bundle
-      run: redocly bundle ${{ inputs.api-product-name }}-unbundled.yaml --output ./${{ inputs.api-product-name }}.yaml
+      run: npx @redocly/cli bundle ${{ inputs.api-product-name }}-unbundled.yaml --output ./${{ inputs.api-product-name }}.yaml
     
     - name: Install Vacuum CLI
       run: npm install -g @quobix/vacuum
       
     - name: Run Vacuum CLI for linting
-      run: vacuum lint ${{ inputs.api-product-name }}.yaml -d
+      run: npx @quobic/vacuum lint ${{ inputs.api-product-name }}.yaml -d
    
     - name: Archive bundled API Definition
       uses: actions/upload-artifact@v4
