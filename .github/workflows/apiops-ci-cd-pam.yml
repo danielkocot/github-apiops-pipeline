@@ -72,7 +72,7 @@ jobs:
           path: ${{ inputs.api-product-name }}.postman_collection.json
  
   deploy-to-pam:
-    needs: load-test
+    needs: contract-test
     runs-on: ubuntu-latest
     steps:
     - name: Download the bundled API Definition
