@@ -31,28 +31,55 @@ jobs:
     - name: Run Vacuum CLI for linting
       run: vacuum lint ${{ inputs.api-product-name }}.yaml -d
    
-    - name: Run Portman tests
-      run: npx @apideck/portman --local ${{ inputs.api-product-name }}.yaml --runNewman
+    - name: Archive bundled API Definition
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.api-product-name }}
+        path: ${{ inputs.api-product-name }}.yaml
     
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Download the bundled API Definition
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.api-product-name }}
+
       - name: Deploy API Definition
         run: ./deploy-api-definition.sh
 
-  load-test:
+
+  contract-test:
     needs: deploy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Download the bundled API Definition
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.api-product-name }}
+      - name: Run Portman tests
+        run: npx @apideck/portman --local ${{ inputs.api-product-name }}.yaml --runNewman
+      - name: Upload Postman collection
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.api-product-name }}-postman-collection
+          path: ${{ inputs.api-product-name }}.postman_collection.json
+
+  load-test:
+    needs: contract-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Postman collection
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.api-product-name }}-postman-collection
       - name: Setup k6
         run: |
              curl -s https://install.k6.io | sh
       - name: Convert Postman Collection to k6 script
         run: |
-              npx postman-to-k6 "path-to-postman-collection.json" -o "k6-script.js"
+              npx postman-to-k6 "${{ inputs.api-product-name }}-postman-collection" -o "k6-script.js"
       - name: Run k6 Load Test
         run: |
               k6 run ./k6-script.js
@@ -61,7 +88,10 @@ jobs:
     needs: load-test
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - name: Download the bundled API Definition
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ inputs.api-product-name }}
     - name: Deploy to API Portal/Marketplace
       run: |
         # The command to deploy the API to the Portal or Marketplace
