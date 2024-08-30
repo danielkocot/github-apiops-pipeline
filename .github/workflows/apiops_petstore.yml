@@ -1,0 +1,13 @@
+name: APIOps
+
+on:
+    push:
+        branches:
+        - main
+
+jobs:
+    call-apiops-local-repo:
+        uses: ./.github/workflows/apiops-ci-cd-loadtesting-pam.yml
+        with:
+            spec-file: './openapi.yaml'
+            api-product-name: 'openapi'
