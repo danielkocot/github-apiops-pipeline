@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Rename the API Definition
       run: mv ${{ inputs.spec-file }} ${{ inputs.api-product-name }}-unbundled.yaml
@@ -28,14 +28,14 @@ jobs:
     - name: Install Vacuum CLI
       run: npm install -g @quobix/vacuum
       
+    - name: Run Vacuum CLI for linting
+      run: vacuum lint ${{ inputs.api-product-name }}.yaml -d
+
     - name: Install Portman CLI
       run: npm install -g portman
       
-    - name: Run Vacuum CLI for linting
-      run: vacuum lint ${{ inputs.api-product-name }}.yaml -d
-      
     - name: Run Portman tests
-      run: portman --cliOptionsFile portman-cli-options.json
+      run: portman --local ${{ inputs.api-product-name }}.yaml --runNewman
     
   deploy:
     needs: build
